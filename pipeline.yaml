@@ -1,0 +1,25 @@
+---
+resources:
+- name: concourse-docker-test
+  type: git
+  source:
+    uri: https://github.com/iamroddo/concourse-docker-test.git
+    branch: master
+
+- name: docker-image
+  type: docker-image
+  source:
+    host: ((docker-host))
+    username: ((docker-username))
+    password: ((docker-password))
+    repository: ((docker-repository))
+
+jobs:
+- name: publish
+  public: true
+  serial: true
+  plan:
+  - get: concourse-docker-test
+  - put: docker-image
+    params:
+      build: concourse-docker-test/.
