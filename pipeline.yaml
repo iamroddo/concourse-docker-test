@@ -31,6 +31,8 @@ jobs:
 - name: version-up
   serial: true
   plan:
+  - get: concourse-docker-test
+    trigger: true
   - put: version
     params:
       bump: minor
