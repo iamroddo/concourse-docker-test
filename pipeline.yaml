@@ -5,6 +5,8 @@ resources:
   source:
     uri: https://github.com/iamroddo/concourse-docker-test.git
     branch: master
+    username: ((git-username))
+    password: ((git-password))
 
 - name: docker-image
   type: docker-image
@@ -13,13 +15,33 @@ resources:
     username: ((docker-username))
     password: ((docker-password))
     repository: ((docker-repository))
+    tag: 'version'
+
+- name: version
+  type: semver
+  source:
+    driver: git
+    uri: https://github.com/iamroddo/concourse-docker-test.git
+    branch: master
+    username: ((git-username))
+    password: ((git-password))
+    file: version
 
 jobs:
+- name: version-up
+  serial: true
+  plan:
+  - put: version
+    params:
+      bump: minor
+
 - name: publish
-  public: true
   serial: true
   plan:
   - get: concourse-docker-test
+  - get : version
+    trigger: true
   - put: docker-image
     params:
       build: concourse-docker-test/.
+      tag: concourse-docker-test/version

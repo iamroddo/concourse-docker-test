@@ -1,2 +1,2 @@
-FROM ubuntu:latest
+FROM busybox:latest
 USER root

@@ -9,7 +9,7 @@ fly -t concourse-docker-test sp -c pipeline.yaml -l credentials.yaml -p docker-b
 
 # Unpause pipeline
 fly -t concourse-docker-test up -p docker-build-push
-fly -t concourse-docker-test trigger-job -j docker-build-push/publish -w
+fly -t concourse-docker-test trigger-job -j docker-build-push/version-up -w
 
 # Clean up and shutdown
 docker-compose down
